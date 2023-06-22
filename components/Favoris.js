@@ -2,12 +2,11 @@ import React from "react";
 import {
   View,
   Text,
-  Button,
   StyleSheet,
   Image,
   ScrollView,
-  TouchableOpacity,
   StatusBar,
+  TouchableOpacity,
 } from "react-native";
 
 const Favoris = ({ navigation, route }) => {
@@ -41,8 +40,17 @@ const Favoris = ({ navigation, route }) => {
         </ScrollView>
         <StatusBar style="auto" />
       </View>
-      <Button title="Profil" onPress={() => navigation.navigate("Profil")} />
-      <Button title="Go back" onPress={() => navigation.goBack()} />
+      <View style={styles.bottomBar}>
+        <TouchableOpacity
+          title="Home"
+          onPress={() => navigation.navigate("Home")}
+        >
+          <Image source={require("../assets/home.png")} />
+        </TouchableOpacity>
+        <TouchableOpacity title="Go Back" onPress={() => navigation.goBack()}>
+          <Image source={require("../assets/back.png")} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -95,6 +103,14 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderRadius: 50,
     padding: 10,
+  },
+  bottomBar: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    backgroundColor: "white",
+    height: 60,
+    width: "100%",
   },
 });
 

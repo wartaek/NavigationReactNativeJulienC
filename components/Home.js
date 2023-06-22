@@ -2,7 +2,6 @@ import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Button,
   Image,
   ScrollView,
   StyleSheet,
@@ -33,11 +32,17 @@ const Home = ({ navigation }) => {
   }, [fetchCocktail]);
 
   const addFavori = (item) => {
-    const newFavorites = favorites.some((favorite) => favorite.id === item.id)
-     ? favorites.filter((favorite) => favorite.id!== item.id)
-      : [...favorites, item];
-    setFavorites(newFavorites);
+    const isFavorite = favorites.some((favorite) => favorite.idDrink === item.idDrink);
+  
+    if (isFavorite) {
+      const newFavorites = favorites.filter((favorite) => favorite.idDrink !== item.idDrink);
+      setFavorites(newFavorites);
+    } else {
+      const newFavorites = [...favorites, item];
+      setFavorites(newFavorites);
+    }
   };
+  
 
   if (!cocktail) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -54,13 +59,20 @@ const Home = ({ navigation }) => {
         <ScrollView>
           {cocktail.map((item) => (
             <View key={item.idDrink} style={styles.viewCocktail}>
-              <Image
-                source={{
-                  uri: `${item.strDrinkThumb}`,
-                }}
-                style={styles.Icon}
-              />
-              <Text style={styles.textCocktail}>{item.strDrink}</Text>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  navigation.navigate("Detail", { cocktail: item })
+                }
+              >
+                <Image
+                  source={{
+                    uri: `${item.strDrinkThumb}`,
+                  }}
+                  style={styles.Icon}
+                />
+                <Text style={styles.textCocktail}>{item.strDrink}</Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => addFavori(item)}
@@ -68,8 +80,8 @@ const Home = ({ navigation }) => {
                 <Image
                   source={
                     favorites.includes(item)
-                    ? require("../assets/heartred.png")
-                    : require("../assets/heart.png")
+                      ? require("../assets/heartred.png")
+                      : require("../assets/heart.png")
                   }
                 />
               </TouchableOpacity>
@@ -78,8 +90,14 @@ const Home = ({ navigation }) => {
         </ScrollView>
         <StatusBar style="auto" />
       </View>
-      <Button title="Profil" onPress={() => navigation.navigate("Profil", { favorites: favorites})} />
-      <Button title="Go back" onPress={() => navigation.goBack()} />
+      <View style={styles.bottomBar}>
+        <TouchableOpacity title="Home" onPress={() => navigation.navigate("Home")}>
+          <Image source={require("../assets/home.png")} />
+        </TouchableOpacity>
+        <TouchableOpacity title="Profil" onPress={() => navigation.navigate("Profil", { favorites: favorites })}>
+          <Image source={require("../assets/profil.png")} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -132,6 +150,14 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderRadius: 50,
     padding: 10,
+  },
+  bottomBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    height: 60,
+    width: "100%",
   },
 });
 

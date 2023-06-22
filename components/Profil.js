@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, Button, StyleSheet, Image } from "react-native";
+import { View, Text, Button, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 const Profil = ({ navigation, route }) => {
-    const favorites = JSON.stringify(route.params);
+  const favorites = JSON.stringify(route.params);
 
-    console.log(favorites);
+  console.log(favorites);
   return (
     <View style={styles.background}>
       <Image
@@ -30,8 +30,18 @@ const Profil = ({ navigation, route }) => {
         </Text>
         <Button
           title=" Vos Favoris"
-          onPress={() => navigation.navigate("Favoris", { favorites: favorites})}
+          onPress={() =>
+            navigation.navigate("Favoris", { favorites: favorites })
+          }
         />
+      </View>
+      <View style={styles.bottomBar}>
+        <TouchableOpacity
+          title="Home"
+          onPress={() => navigation.navigate("Home")}
+        >
+          <Image source={require("../assets/home.png")} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -84,6 +94,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 20,
     color: "orange",
+  },
+  bottomBar: {
+    position: "absolute",
+    bottom: "0%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    backgroundColor: "white",
+    height: 60,
+    width: "100%",
   },
 });
 
